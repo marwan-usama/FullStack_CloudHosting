@@ -1,9 +1,15 @@
 export interface CreateArticleDto {
-    title: string,
-    description:string
+  title: string;
+  description: string;
 }
 
 export interface UpdateArticleDto {
-    title?: string,
-    body?:string
+  title?: string;
+  description?: string;
+}
+
+export interface CreateUserDto {
+  email: string;
+  username: string;
+  password: string;
 }
