@@ -8,26 +8,21 @@ export async function DELETE(
 ) {
   try {
     const id = Number((await params).id);
-    const authHeader = request.headers.get("Authorization");
-    const token = authHeader?.split(" ")[1];
-    if (!token) {
-      return NextResponse.json(
-        { message: "Authentication required" },
-        { status: 401 },
-      );
+
+    const profileToDelete = await prisma.user.findUnique({
+      where: { id },
+    });
+    if (!profileToDelete) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
+    const authHeader = request.headers.get("Authorization") as string;
+    const token = authHeader?.split(" ")[1];
     const decodedToken = verifyJwt(token);
     if (!decodedToken) {
       return NextResponse.json(
         { message: "Invalid or expired token" },
         { status: 401 },
       );
-    }
-    const profileToDelete = await prisma.user.findUnique({
-      where: { id },
-    });
-    if (!profileToDelete) {
-      return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
     if (profileToDelete?.id !== decodedToken.id) {
       return NextResponse.json(
