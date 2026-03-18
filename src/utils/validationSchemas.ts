@@ -19,3 +19,10 @@ export const CreateUserSchema = z.object({
   // Password: Minimum 8 characters, optionally add regex for complexity [3, 7]
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
+
+export const LoginUserSchema = z.object({
+  // Email: Valid email format [4, 7]
+  email: z.string().email("Invalid email address"),
+  // Password: Minimum 8 characters, optionally add regex for complexity [3, 7]
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});

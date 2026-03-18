@@ -13,3 +13,11 @@ export interface CreateUserDto {
   username: string;
   password: string;
 }
+
+export interface RecieveUserDto {
+  email: string;
+  password: string;
+}
+
+
+

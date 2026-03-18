@@ -4,3 +4,9 @@ export type Article = {
     title:string;
     description:string;
 }
+
+export type TokenPayload = {
+  id: number;
+  isAdmin: boolean;
+};
+

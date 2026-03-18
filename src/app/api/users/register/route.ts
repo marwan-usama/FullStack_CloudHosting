@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import * as bcrypt from "bcrypt";
 import z from "zod";
 import { Prisma } from "@/generated/prisma/client";
+import { generateJwtToken } from "@/utils/jwt";
 
 export async function POST(request: NextRequest) {
   const saltRounds = 10;
@@ -25,11 +26,18 @@ export async function POST(request: NextRequest) {
         email: true,
         username: true,
         createdAt: true,
+        isAdmin: true,
       },
     });
-
-    const token = null;
-    // @Todo generate JWT
+    const secretKey = process.env.JWT_SECRET as string;
+    const token = generateJwtToken(
+      {
+        id: createdUser.id,
+        isAdmin: createdUser.isAdmin,
+      },
+      secretKey,
+      "1h",
+    );
 
     return NextResponse.json(
       {
