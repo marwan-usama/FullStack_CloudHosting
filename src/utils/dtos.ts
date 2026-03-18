@@ -19,5 +19,8 @@ export interface RecieveUserDto {
   password: string;
 }
 
+export interface DeleteUserDto {
+  token:string
+}
 
 
