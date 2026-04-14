@@ -8,6 +8,11 @@ export interface UpdateArticleDto {
   description?: string;
 }
 
+export interface UpdateUserDto {
+  username?: string;
+  password?: string;
+}
+
 export interface CreateUserDto {
   email: string;
   username: string;

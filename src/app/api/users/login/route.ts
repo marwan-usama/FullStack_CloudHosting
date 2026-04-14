@@ -3,9 +3,11 @@ import { RecieveUserDto } from "@/utils/dtos";
 import { LoginUserSchema } from "@/utils/validationSchemas";
 import { NextRequest, NextResponse } from "next/server";
 import * as bcrypt from "bcrypt";
-import { generateJwtToken} from "@/utils/jwt";
+import { generateJwtToken } from "@/utils/jwt";
 import z from "zod";
 import { TokenPayload } from "@/utils/types";
+import { cookies } from "next/headers";
+import { setAuthCookies } from "@/utils/auth";
 export async function POST(request: NextRequest) {
   /**
    * 1- take the body from user
@@ -47,10 +49,17 @@ export async function POST(request: NextRequest) {
     const secretKey = process.env.JWT_SECRET as string;
 
     const token = generateJwtToken(payload, secretKey, "1h");
+    await setAuthCookies("jwtToken", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV == "production",
+      sameSite: "strict",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 30,
+    });
+
     return NextResponse.json(
       {
         message: "Login successful",
-        token,
       },
       {
         status: 200,
