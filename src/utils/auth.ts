@@ -12,7 +12,7 @@ export async function setAuthCookies(
   cookieStore.set(name, token, options);
 }
 
-export async function getAuthorizedUser(requestedUserId: number) {
+export async function getAuthorizedUser() {
   const cookieStore = await cookies();
   const token = cookieStore.get("jwtToken")?.value;
 
@@ -36,11 +36,5 @@ export async function getAuthorizedUser(requestedUserId: number) {
     };
   }
 
-  if (decodedToken.id !== requestedUserId) {
-    return {
-      error: NextResponse.json({ message: "Forbidden" }, { status: 403 }),
-    };
-  }
-
-  return { userId: decodedToken.id };
+  return { userId: decodedToken.id, isAdmin: decodedToken.isAdmin };
 }

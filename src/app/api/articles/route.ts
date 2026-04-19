@@ -6,7 +6,11 @@ import { prisma } from "@/lib/prisma";
 import { Article } from "@/generated/prisma/client";
 
 export async function GET(request: NextRequest) {
-  const articles = await prisma.article.findMany();
+  const articles = await prisma.article.findMany({
+    include: {
+      comments: true,
+    },
+  });
   return NextResponse.json({
     articles,
   });

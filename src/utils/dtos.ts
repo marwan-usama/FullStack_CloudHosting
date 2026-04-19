@@ -25,7 +25,14 @@ export interface RecieveUserDto {
 }
 
 export interface DeleteUserDto {
-  token:string
+  token: string;
 }
 
+export interface CreateCommentDto {
+  text: string;
+  articleId: number;
+}
 
+export interface UpdateCommentDto {
+  text: string;
+}

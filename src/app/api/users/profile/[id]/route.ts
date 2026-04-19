@@ -13,10 +13,16 @@ export async function DELETE(
 ) {
   try {
     const id = Number((await params).id);
-    const auth = await getAuthorizedUser(id);
+    const auth = await getAuthorizedUser();
     if (auth.error) {
       return auth.error;
     }
+    if (auth.userId !== id) {
+      return {
+        error: NextResponse.json({ message: "Forbidden" }, { status: 403 }),
+      };
+    }
+
     const profileToDelete = await prisma.user.findUnique({
       where: { id },
     });
@@ -52,9 +58,13 @@ export async function GET(
 ) {
   try {
     const id = Number((await params).id);
-    const auth = await getAuthorizedUser(id);
+    const auth = await getAuthorizedUser();
     if (auth.error) {
       return auth.error;
+    }
+    if (auth.userId !== id) {
+      return NextResponse.json({ message: "Forbidden" }, { status: 403 }),
+      
     }
     const user = await prisma.user.findUnique({
       where: { id },
@@ -85,9 +95,13 @@ export async function PUT(
 ) {
   try {
     const id = Number((await params).id);
-    const auth = await getAuthorizedUser(id);
+    const auth = await getAuthorizedUser();
     if (auth.error) {
       return auth.error;
+    }
+    if (auth.userId !== id) {
+      return NextResponse.json({ message: "Forbidden" }, { status: 403 }),
+      
     }
 
     const json = (await request.json()) as UpdateUserDto;
@@ -112,11 +126,11 @@ export async function PUT(
     if (!updatedUser) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
-    const { password, ...other } = updatedUser; // i can make it through select property at prisma  
+    const { password, ...other } = updatedUser; // i can make it through select property at prisma
     return NextResponse.json(
       {
         message: "user updated successfully",
-        updatedUser:{...other}
+        updatedUser: { ...other },
       },
       {
         status: 200,

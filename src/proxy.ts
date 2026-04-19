@@ -14,5 +14,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: "/api/users/profile/:path*",
+  matcher: ["/api/users/profile/:path*", "/api/comments"],
 };

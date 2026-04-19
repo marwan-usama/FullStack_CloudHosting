@@ -39,3 +39,8 @@ export const LoginUserSchema = z.object({
   // Password: Minimum 8 characters, optionally add regex for complexity [3, 7]
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
+
+export const CreateCommentSchema = z.object({
+  text: z.string().min(1, "Comment text cannot be empty"),
+  articleId: z.number().min(1, "Article ID is required"),
+});
